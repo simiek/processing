@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Pong</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
+    <script>
+        var ballX;
+        var ballY;
+        var ballSpeedX = 0;
+        var ballSpeedY = 0;
+        var paddleHeight = 30;
+        var ballSpeedXPaused = 5;
+        var ballSpeedYpaused = 5;
+
+        function setup() {
+            createCanvas(800, 600);
+           // noCursor();//does not show the mouse when its on the canvas
+            ballX = width / 2;//shows the balls x cordinate
+            ballY = height / 2;//shows the balls y cordinate
+        }
+
+        function draw() {//
+         rectMode(CENTER)
+            background(0);//
+            moveBall();//
+            checkCollide();//various functions and background identified
+            drawPaddle();//
+            drawBall();//
+        }
+
+        function moveBall() {
+            ballX = ballX + ballSpeedX;//moves the ball left and right
+            ballY = ballY + ballSpeedY;// moves ball up and down
+
+            console.log("ballSpeedX: " + ballSpeedX + 
+                               ", ballSpeedY: " + ballSpeedY);
+        }
+
+        function checkCollide() {
+            if (ballX < 0 || ballX > width) {//
+                ballSpeedX = ballSpeedX * -1;//
+            }
+            if (ballY < 0) {                 //
+                ballSpeedY = ballSpeedY * -1;//
+            }                                //these lines focus on collision detection for the ball and when the game over text appears
+            if (ballY > height - paddleHeight) {//
+                if (ballX > mouseX - 25 && ballX < mouseX + 25) {//
+                    ballSpeedY = ballSpeedY * -1;//
+                }                                //
+                else { //
+                stroke(255)
+                    text("GAME OVER!", width / 2, height / 2);//
+                    noLoop();//
+                }
+            }
+        }
+
+        function drawBall() {//
+            noStroke();//This function creates the pong ball
+            ellipse(ballX, ballY, 20, 20);//
+        }
+
+        function drawPaddle() {//
+        
+            strokeWeight(4);//These lines create the paddle to block the ba
+            rect(mouseX, height - paddleHeight - 4, 50, paddleHeight);//
+        }
+        function keyPressed(){
+          if(keyCode == ENTER){// starts the balls movement when the game has started and is ready to play
+            ballSpeedX = ballSpeedXPaused//  these lines store the value of ballspeedxpaused and ballspeedypaused into ballspeedx and ballspeedy --v
+            ballSpeedY = ballSpeedYpaused//<--
+            }
+          if(keyCode == ALT){// checks if the ALT key is pressed then --v
+             if(ballSpeedX != 0){//this line checks if ball speed x is not zero
+                 ballSpeedXPaused =  ballSpeedX// then in these two final lines the balls speed is then recorded and then ready to be used again to un pause
+                ballSpeedYpaused = ballSpeedY
+             }
+             ballSpeedX = 0 // sets the balls speed to zero
+             ballSpeedY = 0
+           
+            }
+              
+          }
+          
+        
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
