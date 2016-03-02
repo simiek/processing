@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Processing Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
+    <script>
+        var x_box2 = 400;
+        var x_box = 100;//x-axis
+        var y_box = 445
+        var projectile = []
+        var score1 = 0
+        var score2 = 0
+        var time = 10000
+        
+        var leftWall = 0;
+        var rightWall = 500;
+        var middleWall = 250;
+
+        function setup() {
+            createCanvas(500, 500)
+
+        }
+
+
+        function draw() {
+            background(150);
+            player1();
+            player2();
+            leftLine();
+            rightLine();
+            middleLine();
+            strokeWeight(3);
+            stroke(0);
+            fill(225);
+            textSize (20)
+            text(time,220,20)
+            time--
+            if(time < 0){
+                text("GAME OVER!!!!!!",200,250)
+                noLoop();
+            }
+            
+            
+           
+            for (var i = 0; i < projectile.length; i++) {
+                projectile[i].move();
+                projectile[i].display();
+                if(projectile[i].x > x_box && projectile[i].x < x_box + 50 && projectile[i].y > y_box){
+                    projectile.splice(i,1)
+                    score1++
+                }
+                if(projectile[i].x > x_box2 && projectile[i].x < x_box2 + 50 && projectile[i].y > y_box){
+                    projectile.splice(i,1)
+                    score2++
+                    
+                }
+                if (projectile[i].y > height) {
+                    projectile.splice(0, 1);
+                }
+                x_box = constrain(x_box,leftWall, middleWall- 50);
+                x_box2 = constrain(x_box2, middleWall,rightWall - 50);
+            }
+
+            projectile.push(new Projectile());
+        }
+        function middleLine(){
+            strokeWeight(3);
+            stroke(225,0,225);
+            line(middleWall,0,middleWall,height);
+        }
+        
+        function leftLine(){
+            strokeWeight(5);
+            stroke(225, 0, 0);
+            line(leftWall, 0, leftWall, height);
+        }
+        function rightLine(){
+            strokeWeight(5);
+            stroke(0, 0, 225);
+            line(rightWall, 0, rightWall, height);
+        }
+        function player1(){
+            
+            stroke(255,0,0);
+            fill(225,0,0);
+            rect(x_box,y_box,50,50);
+            
+            strokeWeight(3);
+            stroke(225,0,0);
+            fill(225,225,225);
+            textSize(20)
+            text(score1,20,20)
+        }
+        
+        function player2(){
+            stroke(0,0,255);
+            fill(0,0,225);
+            rect(x_box2,y_box,50,50);
+            
+            strokeWeight(3);
+            stroke(0,0,225);
+            fill(225,225,225);
+            textSize(20)
+            text(score2,440,20)
+        }
+
+        function keyTyped() {
+            if (key === 'a') { // if key was 'a' was pressed 
+                x_box -= 10; // value would change
+            }
+            if (key === 'd') { // if key was 'd' was pressed 
+                x_box += 10; //value would change
+            }
+            if (key === 'j') {
+                x_box2 -= 10;
+            }
+            if (key === 'l') {
+                x_box2 += 10;
+            }
+        }
+
+
+        function Projectile() {
+            this.x = random(width)
+            this.y = 0
+
+            this.move = function() {
+                this.y += 10;
+            }
+
+            this.display = function() {
+                stroke(0);
+                fill(255);
+                ellipse(this.x, this.y, 10, 10);
+            }
+        }
+
+        function mousePressed() {
+
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
