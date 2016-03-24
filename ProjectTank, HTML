@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+ <title>Processing Template</title>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
+ <script>
+  var pX1 = 50;// x-axis of red box
+  var pY1 = 50;// y-axis of red box
+  var pX2 = 400;// x-axis of blue box 
+  var pY2 = 400;// y-axis of blue box
+  var player1Speed = 20;//player
+  var Player1 = new Player1()
+  var Player2 = new Player2()
+  var score = 0// score obtained by player1
+  var time = 1200// time limit
+
+
+
+  var shot = []
+
+  function setup() {
+   createCanvas(500, 500)
+
+  }
+
+  function draw() {
+   background(0)
+   Player1.display();//draws red box
+   Player1.move();//makes red box move with the control of the mouseX
+   Player2.display();//draws blue tank
+   Player2.move();//makes blue tank move with keyCode
+   text(score, 400, 20)
+   if(score > 500){//if player1 obtains more than 500 points 
+    text("Blue wins", 200, 250)//player1 wins
+    noloop()//end game
+   }
+  
+   for (var i = 0; i < shot.length; i++) {
+    shot[i].move();
+    shot[i].display();
+    
+    
+    if (shot[i].y < 0) { //makes so the projectles do not over flow the cpu
+     shot.splice(i, 1);
+    }
+    if (shot[i].x > Player1.x && shot[i].x < Player1.x + 50 && shot[i].y <= pX2) {
+     score++
+    }
+
+   }
+   if (frameCount % (5) == 0) {//framerate of each shot per pixel
+    shot.push(new Shot());
+    
+
+   }
+   
+
+   text(time, 220, 10)// time displayed
+   if (time < 1) { // when timer reaches to 0 
+    text("Red wins", 200, 250) // displays a "GAME OVER!!!"
+    noLoop(); // stops the game
+   }
+  
+
+   time--//decrease time
+
+  }
+
+  function Shot() {
+   this.x = Player2.x + 20
+   this.y = pY2 - 15
+   this.move = function() {
+    this.y -= 15//decrease y-axis in order to move the bullets up 
+   }
+
+   this.display = function() {//design of shots
+    stroke(0);
+    fill(255);//white
+    rect(this.x, this.y, 10, 10);//cubes
+   }
+  }
+
+
+
+
+
+
+  function Player1() { //red tank 
+   this.x = pX1;
+   this.y = pY1;
+
+   this.display = function() {
+    fill(225, 0, 0);//red
+    stroke(0, 0, 140);
+    rect(this.x, this.y, 50, 50); //bottom bunk
+    rect(this.x + 8, this.y + 10, 35, 35); //top bunk
+   }
+   this.move = function() {
+    this.x = mouseX  - 25
+   }
+  }
+
+  function Player2() { //blue tank
+   this.x = pX2;
+   this.y = pY2;
+
+   this.display = function() {
+    fill(0, 0, 225);//blue
+    stroke(140, 0, 0);
+    rect(this.x, this.y, 50, 50); //top bunk
+    rect(this.x + 15, this.y - 18, 20, 20); //barrel
+    rect(this.x + 8, this.y + 10, 35, 35); //bottom bunk
+   }
+   this.move = function() {
+    if (keyIsPressed && keyCode == LEFT_ARROW) {//if player2 pressed "LEFT_ARROW"
+     this.x -= 20;//move left
+    }
+    else if (keyIsPressed && keyCode == RIGHT_ARROW) {//if player2 pressed "RIGHT_ARROW"
+     this.x += 20;//move right
+    }
+   }
+  }
+ </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
